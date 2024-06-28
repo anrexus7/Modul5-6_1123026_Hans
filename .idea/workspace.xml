@@ -4,22 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="980cdb08-8b77-432d-8d14-f58b632249c5" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Modul5dan6_1123026_Hans.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/jdatepicker-1.3.4.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Main.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Model/Class/DataPenduduk.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Model/Enum/Agama.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Model/Enum/GolonganDarah.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Model/Enum/JenisKelamin.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Model/Enum/StatusPerkawinan.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/View/DateLabelFormatter.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/View/FormInput.java" afterDir="false" />
+    <list default="true" id="980cdb08-8b77-432d-8d14-f58b632249c5" name="Changes" comment="add GUI form input data (need to optimize)">
+      <change afterPath="$PROJECT_DIR$/lib/mysql-connector-java-8.0.20.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Model/Class/DatabaseHandler.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/View/HasilKTP.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/View/FormInput.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/View/FormInput.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -37,9 +27,9 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 4
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 4
+}</component>
   <component name="ProjectId" id="2iPvZ7m5cdB9lSOirLyVazhW4Lo" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
@@ -52,7 +42,7 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "master",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Kuliah/semester pendek (2 ke 3)/OOP/Modul5dan6_1123026_Hans/lib/jdatepicker-1.3.4.jar",
+    "last_opened_file_path": "C:/Kuliah/semester pendek (2 ke 3)/OOP/Modul5dan6_1123026_Hans/lib",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -102,11 +92,30 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1719405082476</updated>
-      <workItem from="1719405083501" duration="14318000" />
+      <workItem from="1719405083501" duration="15266000" />
+      <workItem from="1719467580020" duration="1294000" />
+      <workItem from="1719503726813" duration="16000" />
+      <workItem from="1719506916329" duration="5562000" />
+      <workItem from="1719547411490" duration="3597000" />
+      <workItem from="1719562421254" duration="631000" />
+      <workItem from="1719590723434" duration="3257000" />
     </task>
+    <task id="LOCAL-00001" summary="add GUI form input data (need to optimize)">
+      <option name="closed" value="true" />
+      <created>1719420215685</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1719420215685</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="add GUI form input data (need to optimize)" />
+    <option name="LAST_COMMIT_MESSAGE" value="add GUI form input data (need to optimize)" />
   </component>
 </project>
