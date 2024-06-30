@@ -1,27 +1,40 @@
 package View;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Properties;
+import java.io.File;
+import java.util.*;
 
+import Model.Controller.SavingData;
 import Model.Enum.Agama;
 import Model.Enum.GolonganDarah;
 import Model.Enum.JenisKelamin;
 import Model.Enum.StatusPerkawinan;
 import org.jdatepicker.impl.*;
 
-public class FormInput extends JFrame implements ActionListener{
-    private static JTextField nikField,namaField,tempatLahirField,alamatField, rtRwField, kelDesaField,kecamatanField,kotaPembuatanKtpField;
-    private static JDatePickerImpl tanggalLahirField,tanggalPembuatanKtpField;
-    private static JRadioButton radioButtonM,radioButtonF;
-    private static JRadioButton radioButtonA,radioButtonB,radioButtonAB,radioButtonO;
-    private static JComboBox<String> comboBoxAgama,comboBoxStatusKawin;
-    private static JCheckBox checkKaryawanSwasta,checkPNS,checkWiraswasta,checkAkademisi,checkPengangguran;
-    private static JRadioButton radioButtonWNI,radioButtonWNA;
-    private static JTextField additionalWnaField;
-    private static JFileChooser fileFoto, fileTandaTangan;
-    JButton buttonSubmit;
+public class FormInput extends JFrame implements ActionListener {
+    private JTextField nikField, namaField, tempatLahirField, alamatField, rtRwField, kelDesaField, kecamatanField, kotaPembuatanKtpField;
+
+    private JDatePickerImpl tanggalLahirField, tanggalPembuatanKtpField;
+
+    private ButtonGroup groupGender, groupGolDar, groupKewarganegaraan;
+    private JTextField additionalWnaField;
+
+    private JComboBox<String> comboBoxAgama, comboBoxStatusKawin;
+
+    private ArrayList<JCheckBox> listPekerjaan;
+
+    private JFileChooser fileFoto, fileTandaTangan;
+
+    private JButton buttonSubmit;
+
+    Map<String, String> userInputText, userInputRadio, userInputComboBox;
+    Map<String, Date> userInputDate;
+    Map<String, File> userInputFileChooser;
+
+    Map<String,Object> allInput = new HashMap<>();
 
     public FormInput() {
         initComponents();
@@ -41,20 +54,20 @@ public class FormInput extends JFrame implements ActionListener{
         gbc.gridx = 0;
         gbc.gridy = 0;
         nikField = new JTextField(20);
-        formContainer.add(createInputTextPanel(nikField,"NIK : "), gbc);
+        formContainer.add(createInputTextPanel(nikField, "NIK : "), gbc);
 
         gbc.gridx++;
         namaField = new JTextField(20);
-        formContainer.add(createInputTextPanel(namaField,"Nama : "), gbc);
+        formContainer.add(createInputTextPanel(namaField, "Nama : "), gbc);
 
         gbc.gridx--;
         gbc.gridy++;
         tempatLahirField = new JTextField(20);
-        formContainer.add(createInputTextPanel(tempatLahirField,"Tempat Lahir : "), gbc);
+        formContainer.add(createInputTextPanel(tempatLahirField, "Tempat Lahir : "), gbc);
 
         gbc.gridx++;
         tanggalLahirField = new JDatePickerImpl(createDatePanel(), new DateLabelFormatter());
-        formContainer.add(createInputDatePanel(tanggalLahirField,"Tanggal Lahir : "), gbc);
+        formContainer.add(createInputDatePanel(tanggalLahirField, "Tanggal Lahir : "), gbc);
 
         gbc.gridx--;
         gbc.gridy++;
@@ -66,20 +79,20 @@ public class FormInput extends JFrame implements ActionListener{
         gbc.gridx--;
         gbc.gridy++;
         alamatField = new JTextField(20);
-        formContainer.add(createInputTextPanel(alamatField,"Alamat : "), gbc);
+        formContainer.add(createInputTextPanel(alamatField, "Alamat : "), gbc);
 
         gbc.gridx++;
         rtRwField = new JTextField(20);
-        formContainer.add(createInputTextPanel(rtRwField,"RT/RW : "), gbc);
+        formContainer.add(createInputTextPanel(rtRwField, "RT/RW : "), gbc);
 
         gbc.gridx--;
         gbc.gridy++;
         kelDesaField = new JTextField(20);
-        formContainer.add(createInputTextPanel(kelDesaField,"Kel/Desa : "), gbc);
+        formContainer.add(createInputTextPanel(kelDesaField, "Kel/Desa : "), gbc);
 
         gbc.gridx++;
         kecamatanField = new JTextField(20);
-        formContainer.add(createInputTextPanel(kecamatanField,"Kecamatan : "), gbc);
+        formContainer.add(createInputTextPanel(kecamatanField, "Kecamatan : "), gbc);
 
         gbc.gridx--;
         gbc.gridy++;
@@ -100,21 +113,21 @@ public class FormInput extends JFrame implements ActionListener{
 
         gbc.gridy++;
         fileFoto = new JFileChooser();
-        formContainer.add(createInputFileChooserPanel(fileFoto,"Foto : "), gbc);
+        formContainer.add(createInputFileChooserPanel(fileFoto, "Foto : "), gbc);
 
         gbc.gridy++;
         fileTandaTangan = new JFileChooser();
-        formContainer.add(createInputFileChooserPanel(fileTandaTangan,"Tanda Tangan : "), gbc);
+        formContainer.add(createInputFileChooserPanel(fileTandaTangan, "Tanda Tangan : "), gbc);
 
         gbc.gridy++;
         gbc.gridwidth = 1;
         kotaPembuatanKtpField = new JTextField(20);
         gbc.anchor = GridBagConstraints.EAST;
-        formContainer.add(createInputTextPanel(kotaPembuatanKtpField,"Kota Pembuatan KTP : "), gbc);
+        formContainer.add(createInputTextPanel(kotaPembuatanKtpField, "Kota Pembuatan KTP : "), gbc);
 
         gbc.gridx++;
         tanggalPembuatanKtpField = new JDatePickerImpl(createDatePanel(), new DateLabelFormatter());
-        formContainer.add(createInputDatePanel(tanggalPembuatanKtpField,"Tanggal Pembuatan KTP : "), gbc);
+        formContainer.add(createInputDatePanel(tanggalPembuatanKtpField, "Tanggal Pembuatan KTP : "), gbc);
 
         buttonSubmit = new JButton("Submit!");
         buttonSubmit.setBounds(10, 100, 200, 40);
@@ -126,7 +139,7 @@ public class FormInput extends JFrame implements ActionListener{
         gbc.gridx--;
         gbc.gridwidth = 2;
         gbc.anchor = GridBagConstraints.CENTER;
-        formContainer.add(buttonSubmit,gbc);
+        formContainer.add(buttonSubmit, gbc);
 
         JScrollPane scrollPane = new JScrollPane(formContainer);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
@@ -136,7 +149,7 @@ public class FormInput extends JFrame implements ActionListener{
         this.setVisible(true);
     }
 
-    private static JPanel createPanel(String labelText){
+    private static JPanel createPanel(String labelText) {
         JPanel panel = new JPanel(new FlowLayout());
         JLabel label = new JLabel(labelText);
         panel.add(label);
@@ -151,10 +164,11 @@ public class FormInput extends JFrame implements ActionListener{
         return panel;
     }
 
-    private JDatePanelImpl createDatePanel(){
+    private JDatePanelImpl createDatePanel() {
         UtilDateModel model = new UtilDateModel();
         Properties p = new Properties();
-        JDatePanelImpl datePanel = new JDatePanelImpl(model, p);
+        JDatePanelImpl datePanel;
+        datePanel = new JDatePanelImpl(model, p);
 
         return datePanel;
     }
@@ -170,12 +184,15 @@ public class FormInput extends JFrame implements ActionListener{
     private JPanel createInputRadioGenderPanel(String labelText) {
         JPanel panel = createPanel(labelText);
 
-        radioButtonM = new JRadioButton(String.valueOf(JenisKelamin.PRIA));
-        radioButtonF = new JRadioButton(String.valueOf(JenisKelamin.WANITA));
+        JRadioButton radioButtonM = new JRadioButton(String.valueOf(JenisKelamin.PRIA));
+        JRadioButton radioButtonF = new JRadioButton(String.valueOf(JenisKelamin.WANITA));
 
-        ButtonGroup group = new ButtonGroup();
-        group.add(radioButtonM);
-        group.add(radioButtonF);
+        radioButtonM.setActionCommand(radioButtonM.getText());
+        radioButtonF.setActionCommand(radioButtonF.getText());
+
+        groupGender = new ButtonGroup();
+        groupGender.add(radioButtonM);
+        groupGender.add(radioButtonF);
 
         panel.add(radioButtonM);
         panel.add(radioButtonF);
@@ -186,16 +203,21 @@ public class FormInput extends JFrame implements ActionListener{
     private JPanel createInputRadioGolDarPanel(String labelText) {
         JPanel panel = createPanel(labelText);
 
-        radioButtonA = new JRadioButton(String.valueOf(GolonganDarah.A));
-        radioButtonB = new JRadioButton(String.valueOf(GolonganDarah.B));
-        radioButtonAB = new JRadioButton(String.valueOf(GolonganDarah.AB));
-        radioButtonO = new JRadioButton(String.valueOf(GolonganDarah.O));
+        JRadioButton radioButtonA = new JRadioButton(String.valueOf(GolonganDarah.A));
+        JRadioButton radioButtonB = new JRadioButton(String.valueOf(GolonganDarah.B));
+        JRadioButton radioButtonAB = new JRadioButton(String.valueOf(GolonganDarah.AB));
+        JRadioButton radioButtonO = new JRadioButton(String.valueOf(GolonganDarah.O));
 
-        ButtonGroup group = new ButtonGroup();
-        group.add(radioButtonA);
-        group.add(radioButtonB);
-        group.add(radioButtonAB);
-        group.add(radioButtonO);
+        radioButtonA.setActionCommand(radioButtonA.getText());
+        radioButtonB.setActionCommand(radioButtonB.getText());
+        radioButtonAB.setActionCommand(radioButtonAB.getText());
+        radioButtonO.setActionCommand(radioButtonO.getText());
+
+        groupGolDar = new ButtonGroup();
+        groupGolDar.add(radioButtonA);
+        groupGolDar.add(radioButtonB);
+        groupGolDar.add(radioButtonAB);
+        groupGolDar.add(radioButtonO);
 
         panel.add(radioButtonA);
         panel.add(radioButtonB);
@@ -205,10 +227,13 @@ public class FormInput extends JFrame implements ActionListener{
         return panel;
     }
 
-    private static JPanel createInputComboBoxAgamaPanel(String labelText){
+    private JPanel createInputComboBoxAgamaPanel(String labelText) {
         JPanel panel = createPanel(labelText);
 
-        Object[] arrChoices = Agama.values();
+        Agama[] values = Agama.values();
+        Object[] arrChoices = new Object[values.length + 1];
+        arrChoices[0] = "";
+        System.arraycopy(values, 0, arrChoices, 1, values.length);
 
         comboBoxAgama = new JComboBox(arrChoices);
         panel.add(comboBoxAgama);
@@ -216,10 +241,13 @@ public class FormInput extends JFrame implements ActionListener{
         return panel;
     }
 
-    private static JPanel createInputComboBoxStatusKawinPanel(String labelText){
+    private JPanel createInputComboBoxStatusKawinPanel(String labelText) {
         JPanel panel = createPanel(labelText);
 
-        Object[] arrChoices = StatusPerkawinan.values();
+        StatusPerkawinan[] values = StatusPerkawinan.values();
+        Object[] arrChoices = new Object[values.length + 1];
+        arrChoices[0] = "";
+        System.arraycopy(values, 0, arrChoices, 1, values.length);
 
         comboBoxStatusKawin = new JComboBox(arrChoices);
         panel.add(comboBoxStatusKawin);
@@ -227,20 +255,26 @@ public class FormInput extends JFrame implements ActionListener{
         return panel;
     }
 
-    private static JPanel createInputCheckBoxPekerjaanPanel(String labelText){
+    private JPanel createInputCheckBoxPekerjaanPanel(String labelText) {
         JPanel panel = createPanel(labelText);
 
-        checkKaryawanSwasta = new JCheckBox("Karyawan Swasta");
-        checkPNS= new JCheckBox("PNS");
-        checkWiraswasta= new JCheckBox("Wiraswasta");
-        checkAkademisi= new JCheckBox("Akademisi");
-        checkPengangguran= new JCheckBox("Pengangguran");
+        JCheckBox checkKaryawanSwasta = new JCheckBox("Karyawan Swasta");
+        JCheckBox checkPNS = new JCheckBox("PNS");
+        JCheckBox checkWiraswasta = new JCheckBox("Wiraswasta");
+        JCheckBox checkAkademisi = new JCheckBox("Akademisi");
+        JCheckBox checkPengangguran = new JCheckBox("Pengangguran");
 
-        panel.add(checkKaryawanSwasta);
-        panel.add(checkPNS);
-        panel.add(checkWiraswasta);
-        panel.add(checkAkademisi);
-        panel.add(checkPengangguran);
+        listPekerjaan = new ArrayList<>();
+
+        listPekerjaan.add(checkKaryawanSwasta);
+        listPekerjaan.add(checkPNS);
+        listPekerjaan.add(checkWiraswasta);
+        listPekerjaan.add(checkAkademisi);
+        listPekerjaan.add(checkPengangguran);
+
+        for (JCheckBox pekerjaan : listPekerjaan) {
+            panel.add(pekerjaan);
+        }
 
         checkPengangguran.addActionListener(e -> {
             if (checkPengangguran.isSelected()) {
@@ -253,7 +287,7 @@ public class FormInput extends JFrame implements ActionListener{
                 checkPNS.setSelected(false);
                 checkWiraswasta.setSelected(false);
                 checkAkademisi.setSelected(false);
-            }else {
+            } else {
                 checkKaryawanSwasta.setEnabled(true);
                 checkPNS.setEnabled(true);
                 checkWiraswasta.setEnabled(true);
@@ -264,15 +298,18 @@ public class FormInput extends JFrame implements ActionListener{
         return panel;
     }
 
-    private static JPanel createInputRadioKewarganegaraanPanel(String labelText){
+    private JPanel createInputRadioKewarganegaraanPanel(String labelText) {
         JPanel panel = createPanel(labelText);
 
-        radioButtonWNI = new JRadioButton("WNI");
-        radioButtonWNA = new JRadioButton("WNA");
+        JRadioButton radioButtonWNI = new JRadioButton("WNI");
+        JRadioButton radioButtonWNA = new JRadioButton("WNA");
 
-        ButtonGroup group = new ButtonGroup();
-        group.add(radioButtonWNI);
-        group.add(radioButtonWNA);
+        radioButtonWNI.setActionCommand("WNI");
+        radioButtonWNA.setActionCommand("WNA");
+
+        groupKewarganegaraan = new ButtonGroup();
+        groupKewarganegaraan.add(radioButtonWNI);
+        groupKewarganegaraan.add(radioButtonWNA);
 
         additionalWnaField = new JTextField(20);
         additionalWnaField.setVisible(false);
@@ -282,100 +319,210 @@ public class FormInput extends JFrame implements ActionListener{
         panel.add(additionalWnaField);
 
         radioButtonWNA.addActionListener(e -> {
-            if(radioButtonWNA.isSelected()) {
+            if (radioButtonWNA.isSelected()) {
                 additionalWnaField.setVisible(true);
                 panel.revalidate();
                 panel.repaint();
             }
-            });
+        });
 
         radioButtonWNI.addActionListener(e -> {
-            if(radioButtonWNI.isSelected()) {
+            if (radioButtonWNI.isSelected()) {
                 additionalWnaField.setVisible(false);
                 panel.revalidate();
                 panel.repaint();
             }
-            });
+        });
 
+        return panel;
+    }
+
+    private JPanel createInputFileChooserPanel(JFileChooser fileChooser, String labelText) { //need fixing shit :v
+        JPanel panel = createPanel(labelText);
+        panel.add(fileChooser);
         return panel;
     }
 
     private void onSubmit() {
-//        new LoginScreen();
-        this.dispose();
+        LinkedList<Boolean> isValid = new LinkedList<>();
+        isValid.add(validatingText());
+        isValid.add(validatingDate());
+        isValid.add(validatingRadio());
+        isValid.add(validatingComboBox());
+        isValid.add(validatingFileChooser());
+        isValid.add(validatingCheckBox());
 
-        System.out.println("nikField: " + nikField.getText());
-        System.out.println("namaField: " + namaField.getText());
-        System.out.println("tempatLahirField: " + tempatLahirField.getText());
-        System.out.println("alamatField: " + alamatField.getText());
-        System.out.println("rtRwField: " + rtRwField.getText());
-        System.out.println("kelDesaField: " + kelDesaField.getText());
-        System.out.println("kecamatanField: " + kecamatanField.getText());
-        System.out.println("kotaPembuatanKtpField: " + kotaPembuatanKtpField.getText());
+        boolean isReallyValid = true;
 
-        // Print statements for JDatePickerImpl components
-        System.out.println("tanggalLahirField: " + tanggalLahirField.getJFormattedTextField().getText());
-        System.out.println("tanggalPembuatanKtpField: " + tanggalPembuatanKtpField.getJFormattedTextField().getText());
-
-        // Print statements for JRadioButton components (gender)
-        if (radioButtonM.isSelected()) {
-            System.out.println("Gender: Male");
-        } else if (radioButtonF.isSelected()) {
-            System.out.println("Gender: Female");
+        Iterator<Boolean> iterator = isValid.iterator();
+        while (iterator.hasNext() && isReallyValid) {
+            isReallyValid = iterator.next();
         }
 
-        // Print statements for JRadioButton components (blood type)
-        if (radioButtonA.isSelected()) {
-            System.out.println("Blood Type: A");
-        } else if (radioButtonB.isSelected()) {
-            System.out.println("Blood Type: B");
-        } else if (radioButtonAB.isSelected()) {
-            System.out.println("Blood Type: AB");
-        } else if (radioButtonO.isSelected()) {
-            System.out.println("Blood Type: O");
+        allInput.putAll(userInputText);
+        allInput.putAll(userInputDate);
+        allInput.putAll(userInputRadio);
+        allInput.putAll(userInputComboBox);
+        allInput.putAll(userInputFileChooser);
+
+        if (isReallyValid) {
+            for(Object temp : allInput.values()){
+                System.out.println(temp);
+            }
+
+            new SavingData(allInput);
+
+            this.dispose();
+        } else {
+            JOptionPane.showMessageDialog(null, "ISI NU BALEG NYING :V ", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private boolean validatingText() {
+        boolean validating = true;
+
+        userInputText = new HashMap<>();
+        userInputText.put("nik", nikField.getText());
+        userInputText.put("nik", nikField.getText());
+        userInputText.put("nama", namaField.getText());
+        userInputText.put("tempatLahir", tempatLahirField.getText());
+        userInputText.put("alamat", alamatField.getText());
+        userInputText.put("rtRw", rtRwField.getText());
+        userInputText.put("kelDesa", kelDesaField.getText());
+        userInputText.put("kecamatan", kecamatanField.getText());
+        userInputText.put("kotaPembuatanKtp", kotaPembuatanKtpField.getText());
+        userInputText.put("additionalWNA", additionalWnaField.getText());
+
+        Iterator<Map.Entry<String, String>> iteratorText = userInputText.entrySet().iterator();
+        while (iteratorText.hasNext() && validating) {
+
+            Map.Entry<String, String> entry = iteratorText.next();
+            String key = entry.getKey();
+            String textField = entry.getValue();
+
+            if (textField.isEmpty()) {
+                validating = false;
+            }
+
+            if (key.equals("additionalWNA")) {
+                validating = true;
+            }
+
         }
 
-        // Print statements for JComboBox components
-        System.out.println("comboBoxAgama: " + comboBoxAgama.getSelectedItem());
-        System.out.println("comboBoxStatusKawin: " + comboBoxStatusKawin.getSelectedItem());
+        return validating;
+    }
 
-        // Print statements for JCheckBox components
-        System.out.println("checkKaryawanSwasta: " + (checkKaryawanSwasta.isSelected() ? "Selected" : "Not Selected"));
-        System.out.println("checkPNS: " + (checkPNS.isSelected() ? "Selected" : "Not Selected"));
-        System.out.println("checkWiraswasta: " + (checkWiraswasta.isSelected() ? "Selected" : "Not Selected"));
-        System.out.println("checkAkademisi: " + (checkAkademisi.isSelected() ? "Selected" : "Not Selected"));
-        System.out.println("checkPengangguran: " + (checkPengangguran.isSelected() ? "Selected" : "Not Selected"));
+    private boolean validatingDate() {
+        boolean validating = true;
 
-        // Print statements for JRadioButton components (nationality)
-        if (radioButtonWNI.isSelected()) {
-            System.out.println("Nationality: WNI");
-        } else if (radioButtonWNA.isSelected()) {
-            System.out.println("Nationality: WNA");
-            System.out.println("additionalWnaField: " + additionalWnaField.getText());
+        userInputDate = new HashMap<>();
+        userInputDate.put("tanggalLahir", (Date) tanggalLahirField.getModel().getValue());
+        userInputDate.put("tanggalPembuatanKTP", (Date) tanggalPembuatanKtpField.getModel().getValue());
+
+        Iterator<Date> iteratorDate = userInputDate.values().iterator();
+        while (iteratorDate.hasNext() && validating) {
+            Date dateField = iteratorDate.next();
+
+            if (dateField == null) {
+                validating = false;
+            }
         }
 
+        return validating;
+    }
+
+    private boolean validatingRadio() {
+        boolean validating = true;
+        userInputRadio = new HashMap<>();
+        userInputRadio.put("gender", groupGender.getSelection().getActionCommand());
+        userInputRadio.put("golDar", groupGolDar.getSelection().getActionCommand());
+        userInputRadio.put("kewarganegaraan", groupKewarganegaraan.getSelection().getActionCommand());
+
+        Iterator<String> iteratorRadio = userInputRadio.values().iterator();
+        while (iteratorRadio.hasNext() && validating) {
+            String groupField = iteratorRadio.next();
+
+            if (groupField.equals("WNA") && userInputText.get("additionalWNA").isEmpty()) {
+                validating = false;
+            } else if (groupField.equals("WNI")) {
+                userInputText.put("additionalWNA",""); //memastikan kosong
+                validating = true;
+            }
+
+            if (groupField == null) {
+                validating = false;
+            }
+        }
+
+        return validating;
+    }
+
+    private boolean validatingComboBox() {
+        boolean validating = true;
+
+        userInputComboBox = new HashMap<>();
+        userInputComboBox.put("agama", comboBoxAgama.getSelectedItem().toString());
+        userInputComboBox.put("statusKawin", comboBoxStatusKawin.getSelectedItem().toString());
+
+        Iterator<String> iteratorComboBox = userInputComboBox.values().iterator();
+        while (iteratorComboBox.hasNext() && validating) {
+            String comboBoxField = iteratorComboBox.next();
+
+            if (comboBoxField.isEmpty()) {
+                validating = false;
+            }
+        }
+
+        return validating;
+    }
+
+    private boolean validatingCheckBox() {
+        boolean validating = false;
+        String pekerjaan = "";
+
+        for (JCheckBox checkPekerjaan : listPekerjaan) {
+            if (checkPekerjaan.getText().equals("Pengangguran") && listPekerjaan.get(4).isSelected()) {
+                validating = true;
+                break;
+            } else {
+                if (checkPekerjaan.isSelected()) {
+                    validating = true;
+                    break;
+                }
+            }
+        }
+        for (JCheckBox checkPekerjaan : listPekerjaan) {
+            if(checkPekerjaan.isSelected()){
+                pekerjaan += checkPekerjaan.getText() + " ";
+            }
+        }
+
+        allInput.put("pekerjaan", pekerjaan);
+
+        return validating;
+    }
+
+    private boolean validatingFileChooser() {
+        boolean validating = true;
+
+        userInputFileChooser = new HashMap<>();
+        userInputFileChooser.put("fileFoto", fileFoto.getSelectedFile());
+        userInputFileChooser.put("fileTandaTangan", fileTandaTangan.getSelectedFile());
+
+        Iterator<File> iteratorFile = userInputFileChooser.values().iterator();
+        while (iteratorFile.hasNext() && validating) {
+            File fileChooser = iteratorFile.next();
+            if (fileChooser == null) {
+                validating = false;
+            }
+        }
+
+        return validating;
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        String command = e.getActionCommand();
-        switch (command) {
-            case "Submit!":
-                onSubmit();
-//                 new LoginScreen();
-//                 frame.dispose();
-//                break;
-//            case "UPDATE":
-//                break;
-            default:
-                break;
-        }
-        System.out.println(command);
-    }
-
-    private static JPanel createInputFileChooserPanel(JFileChooser fileChooser, String labelText){ //need fixing shit :v
-        JPanel panel = createPanel(labelText);
-        panel.add(fileChooser);
-        return panel;
+        onSubmit();
     }
 }

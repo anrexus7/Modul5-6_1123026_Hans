@@ -4,12 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="980cdb08-8b77-432d-8d14-f58b632249c5" name="Changes" comment="add GUI form input data (need to optimize)">
-      <change afterPath="$PROJECT_DIR$/lib/mysql-connector-java-8.0.20.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Model/Class/DatabaseHandler.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/View/HasilKTP.java" afterDir="false" />
+    <list default="true" id="980cdb08-8b77-432d-8d14-f58b632249c5" name="Changes" comment="add action listener (-1 validating all input) and DB handler">
+      <change afterPath="$PROJECT_DIR$/src/Model/Controller/SavingData.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Main.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/View/FormInput.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/View/FormInput.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/View/HasilKTP.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/View/HasilKTP.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -36,24 +36,24 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Application.Main.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "master",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Kuliah/semester pendek (2 ke 3)/OOP/Modul5dan6_1123026_Hans/lib",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "Libraries",
-    "project.structure.proportion": "0.0",
-    "project.structure.side.proportion": "0.2",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.Main.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Kuliah/semester pendek (2 ke 3)/OOP/Modul5dan6_1123026_Hans/lib&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Libraries&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Kuliah\semester pendek (2 ke 3)\OOP\Modul5dan6_1123026_Hans\lib" />
@@ -98,7 +98,10 @@
       <workItem from="1719506916329" duration="5562000" />
       <workItem from="1719547411490" duration="3597000" />
       <workItem from="1719562421254" duration="631000" />
-      <workItem from="1719590723434" duration="3257000" />
+      <workItem from="1719590723434" duration="3323000" />
+      <workItem from="1719625788871" duration="17359000" />
+      <workItem from="1719674695875" duration="3900000" />
+      <workItem from="1719742397268" duration="19232000" />
     </task>
     <task id="LOCAL-00001" summary="add GUI form input data (need to optimize)">
       <option name="closed" value="true" />
@@ -108,7 +111,15 @@
       <option name="project" value="LOCAL" />
       <updated>1719420215685</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="add action listener (-1 validating all input) and DB handler">
+      <option name="closed" value="true" />
+      <created>1719594070514</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1719594070514</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -116,6 +127,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="add GUI form input data (need to optimize)" />
-    <option name="LAST_COMMIT_MESSAGE" value="add GUI form input data (need to optimize)" />
+    <MESSAGE value="add action listener (-1 validating all input) and DB handler" />
+    <option name="LAST_COMMIT_MESSAGE" value="add action listener (-1 validating all input) and DB handler" />
   </component>
 </project>
