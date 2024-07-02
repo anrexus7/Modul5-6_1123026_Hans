@@ -1,18 +1,17 @@
-package Model.Controller;
+package Controller;
 
 import Model.Class.DataPenduduk;
 import Model.Enum.Agama;
 import Model.Enum.GolonganDarah;
 import Model.Enum.JenisKelamin;
 import Model.Enum.StatusPerkawinan;
-import View.HasilKTP;
 
 import java.io.File;
 import java.util.Date;
 import java.util.Map;
 
-public class SavingData {
-    public SavingData(Map<String, Object> allInput) {
+public class Temporary {
+    public static DataPenduduk temp(Map<String, Object> allInput){
         DataPenduduk tempData = new DataPenduduk();
 
         tempData.setNIK((String) allInput.get("nik"));
@@ -70,7 +69,7 @@ public class SavingData {
 
         tempData.setPekerjaan((String) allInput.get("pekerjaan"));
 
-        tempData.setKewarganegaraan(allInput.get("kewarganegaraan").toString() + allInput.get("additionalWNA"));
+        tempData.setKewarganegaraan(allInput.get("kewarganegaraan").toString() +" "+allInput.get("additionalWNA"));
 
         File foto = (File) allInput.get("fileFoto");
         tempData.setFoto(foto.getAbsolutePath());
@@ -81,6 +80,6 @@ public class SavingData {
         tempData.setKotaPembuatanKTP((String) allInput.get("kotaPembuatanKtp"));
         tempData.setTanggalPembuatanKTP((Date) allInput.get("tanggalPembuatanKTP"));
 
-        new HasilKTP(tempData);
+        return tempData;
     }
 }

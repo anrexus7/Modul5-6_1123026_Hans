@@ -1,5 +1,18 @@
 package View;
 
+import Controller.GetData;
+import Controller.SavingData;
+import Controller.UpdateData;
+import Model.Class.DataPenduduk;
+import Model.Class.DateLabelFormatter;
+import Model.Enum.Agama;
+import Model.Enum.GolonganDarah;
+import Model.Enum.JenisKelamin;
+import Model.Enum.StatusPerkawinan;
+import org.jdatepicker.impl.JDatePanelImpl;
+import org.jdatepicker.impl.JDatePickerImpl;
+import org.jdatepicker.impl.UtilDateModel;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -7,15 +20,7 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.*;
 
-import Controller.SavingData;
-import Model.Class.DateLabelFormatter;
-import Model.Enum.Agama;
-import Model.Enum.GolonganDarah;
-import Model.Enum.JenisKelamin;
-import Model.Enum.StatusPerkawinan;
-import org.jdatepicker.impl.*;
-
-public class FormInput extends JFrame implements ActionListener {
+public class FormUpdate extends JFrame implements ActionListener {
     private JTextField nikField, namaField, tempatLahirField, alamatField, rtRwField, kelDesaField, kecamatanField, kotaPembuatanKtpField;
 
     private JDatePickerImpl tanggalLahirField, tanggalPembuatanKtpField;
@@ -29,15 +34,20 @@ public class FormInput extends JFrame implements ActionListener {
 
     private JFileChooser fileFoto, fileTandaTangan;
 
-    private JButton buttonSubmit;
+    private JButton buttonUpdate;
+
+    private static DataPenduduk tempData;
 
     Map<String, String> userInputText, userInputRadio, userInputComboBox;
     Map<String, Date> userInputDate;
     Map<String, File> userInputFileChooser;
 
-    Map<String,Object> allInput = new HashMap<>();
+    Map<String, Object> allInput = new HashMap<>();
 
-    public FormInput() {
+    public FormUpdate(String nik) {
+        GetData dataFromDB = new GetData();
+        tempData = dataFromDB.fetchDataFromDB(nik);
+
         initComponents();
     }
 
@@ -54,93 +64,97 @@ public class FormInput extends JFrame implements ActionListener {
 
         gbc.gridx = 0;
         gbc.gridy = 0;
-        nikField = new JTextField(20);
+        nikField = new JTextField(tempData.getNIK(), 20);
+
         formContainer.add(createInputTextPanel(nikField, "NIK : "), gbc);
 
         gbc.gridx++;
-        namaField = new JTextField(20);
+        namaField = new JTextField(tempData.getNama(), 20);
         formContainer.add(createInputTextPanel(namaField, "Nama : "), gbc);
 
         gbc.gridx--;
         gbc.gridy++;
-        tempatLahirField = new JTextField(20);
+        tempatLahirField = new JTextField(tempData.getTempatLahir(), 20);
         formContainer.add(createInputTextPanel(tempatLahirField, "Tempat Lahir : "), gbc);
 
         gbc.gridx++;
-        tanggalLahirField = new JDatePickerImpl(createDatePanel(), new DateLabelFormatter());
+        tanggalLahirField = new JDatePickerImpl(createDatePanel(tempData.getTanggalLahir()), new DateLabelFormatter());
         formContainer.add(createInputDatePanel(tanggalLahirField, "Tanggal Lahir : "), gbc);
 
         gbc.gridx--;
         gbc.gridy++;
-        formContainer.add(createInputRadioGenderPanel("Gender : "), gbc);
+        formContainer.add(createInputRadioGenderPanel("Gender : ",tempData.getJenisKelamin().toString()), gbc);
 
         gbc.gridx++;
-        formContainer.add(createInputRadioGolDarPanel("Golongan Darah : "), gbc);
+        formContainer.add(createInputRadioGolDarPanel("Golongan Darah : ",tempData.getGolDarah().toString()), gbc);
 
         gbc.gridx--;
         gbc.gridy++;
-        alamatField = new JTextField(20);
+        alamatField = new JTextField(tempData.getAlamat(), 20);
         formContainer.add(createInputTextPanel(alamatField, "Alamat : "), gbc);
 
         gbc.gridx++;
-        rtRwField = new JTextField(20);
+        rtRwField = new JTextField(tempData.getRtRw(), 20);
         formContainer.add(createInputTextPanel(rtRwField, "RT/RW : "), gbc);
 
         gbc.gridx--;
         gbc.gridy++;
-        kelDesaField = new JTextField(20);
+        kelDesaField = new JTextField(tempData.getKelDesa(), 20);
         formContainer.add(createInputTextPanel(kelDesaField, "Kel/Desa : "), gbc);
 
         gbc.gridx++;
-        kecamatanField = new JTextField(20);
+        kecamatanField = new JTextField(tempData.getKecamatan(), 20);
         formContainer.add(createInputTextPanel(kecamatanField, "Kecamatan : "), gbc);
 
         gbc.gridx--;
         gbc.gridy++;
-        formContainer.add(createInputComboBoxAgamaPanel("Agama : "), gbc);
+        formContainer.add(createInputComboBoxAgamaPanel("Agama : ",tempData.getAgama()), gbc);
 
         gbc.gridx++;
-
-        formContainer.add(createInputComboBoxStatusKawinPanel("Status Perkawinan : "), gbc);
+        formContainer.add(createInputComboBoxStatusKawinPanel("Status Perkawinan : ", tempData.getStatusPerkawinan()), gbc);
 
         gbc.gridx--;
         gbc.gridy++;
         gbc.gridwidth = 2;
         gbc.anchor = GridBagConstraints.CENTER;
-        formContainer.add(createInputCheckBoxPekerjaanPanel("Pekerjaan : "), gbc);
+        formContainer.add(createInputCheckBoxPekerjaanPanel("Pekerjaan : ", tempData.getPekerjaan()), gbc);
 
         gbc.gridy++;
-        formContainer.add(createInputRadioKewarganegaraanPanel("Kewarganegaraan : "), gbc);
+        formContainer.add(createInputRadioKewarganegaraanPanel("Kewarganegaraan : ", tempData.getKewarganegaraan()), gbc);
 
         gbc.gridy++;
+        File choosenFileF = new File(tempData.getFoto());
         fileFoto = new JFileChooser();
+        fileFoto.setSelectedFile(choosenFileF);
         formContainer.add(createInputFileChooserPanel(fileFoto, "Foto : "), gbc);
 
         gbc.gridy++;
+        File choosenFileT = new File(tempData.getTandaTangan());
         fileTandaTangan = new JFileChooser();
+        fileTandaTangan.setSelectedFile(choosenFileT);
         formContainer.add(createInputFileChooserPanel(fileTandaTangan, "Tanda Tangan : "), gbc);
 
         gbc.gridy++;
         gbc.gridwidth = 1;
-        kotaPembuatanKtpField = new JTextField(20);
         gbc.anchor = GridBagConstraints.EAST;
+        kotaPembuatanKtpField = new JTextField(tempData.getKotaPembuatanKTP(), 20);
         formContainer.add(createInputTextPanel(kotaPembuatanKtpField, "Kota Pembuatan KTP : "), gbc);
 
         gbc.gridx++;
-        tanggalPembuatanKtpField = new JDatePickerImpl(createDatePanel(), new DateLabelFormatter());
+        tanggalPembuatanKtpField = new JDatePickerImpl(createDatePanel(tempData.getTanggalPembuatanKTP()), new DateLabelFormatter());
         formContainer.add(createInputDatePanel(tanggalPembuatanKtpField, "Tanggal Pembuatan KTP : "), gbc);
 
-        buttonSubmit = new JButton("Submit!");
-        buttonSubmit.setBounds(10, 100, 200, 40);
-        buttonSubmit.addActionListener(this);
-        buttonSubmit.setEnabled(true);
-        buttonSubmit.setVisible(true);
+        buttonUpdate = new JButton("Submit!");
+        buttonUpdate.setBounds(10, 100, 200, 40);
+        buttonUpdate.addActionListener(this);
+        buttonUpdate.setEnabled(true);
+        buttonUpdate.setVisible(true);
 
         gbc.gridy++;
         gbc.gridx--;
         gbc.gridwidth = 2;
         gbc.anchor = GridBagConstraints.CENTER;
-        formContainer.add(buttonSubmit, gbc);
+        formContainer.add(buttonUpdate, gbc);
 
         JScrollPane scrollPane = new JScrollPane(formContainer);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
@@ -165,9 +179,16 @@ public class FormInput extends JFrame implements ActionListener {
         return panel;
     }
 
-    private JDatePanelImpl createDatePanel() {
+    private JDatePanelImpl createDatePanel(Date value) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(value);
+
         UtilDateModel model = new UtilDateModel();
         Properties p = new Properties();
+
+        model.setDate(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
+        model.setSelected(true);
+
         JDatePanelImpl datePanel;
         datePanel = new JDatePanelImpl(model, p);
 
@@ -182,7 +203,7 @@ public class FormInput extends JFrame implements ActionListener {
         return panel;
     }
 
-    private JPanel createInputRadioGenderPanel(String labelText) {
+    private JPanel createInputRadioGenderPanel(String labelText, String selected) {
         JPanel panel = createPanel(labelText);
 
         JRadioButton radioButtonM = new JRadioButton(String.valueOf(JenisKelamin.PRIA));
@@ -198,10 +219,16 @@ public class FormInput extends JFrame implements ActionListener {
         panel.add(radioButtonM);
         panel.add(radioButtonF);
 
+        if (selected.equals("PRIA")) {
+            radioButtonM.setSelected(true);
+        } else {
+            radioButtonF.setSelected(true);
+        }
+
         return panel;
     }
 
-    private JPanel createInputRadioGolDarPanel(String labelText) {
+    private JPanel createInputRadioGolDarPanel(String labelText, String selected) {
         JPanel panel = createPanel(labelText);
 
         JRadioButton radioButtonA = new JRadioButton(String.valueOf(GolonganDarah.A));
@@ -225,38 +252,49 @@ public class FormInput extends JFrame implements ActionListener {
         panel.add(radioButtonAB);
         panel.add(radioButtonO);
 
+        switch (selected) {
+            case "A":
+                radioButtonA.setSelected(true);
+                break;
+            case "B":
+                radioButtonB.setSelected(true);
+                break;
+            case "AB":
+                radioButtonAB.setSelected(true);
+                break;
+            default:
+                radioButtonO.setSelected(true);
+                break;
+        }
+
         return panel;
     }
 
-    private JPanel createInputComboBoxAgamaPanel(String labelText) {
+    private JPanel createInputComboBoxAgamaPanel(String labelText, Agama selected) {
         JPanel panel = createPanel(labelText);
 
-        Agama[] values = Agama.values();
-        Object[] arrChoices = new Object[values.length + 1];
-        arrChoices[0] = "";
-        System.arraycopy(values, 0, arrChoices, 1, values.length);
+        Object[] arrChoices = Agama.values();
 
         comboBoxAgama = new JComboBox(arrChoices);
         panel.add(comboBoxAgama);
 
+        comboBoxAgama.setSelectedItem(selected);
         return panel;
     }
 
-    private JPanel createInputComboBoxStatusKawinPanel(String labelText) {
+    private JPanel createInputComboBoxStatusKawinPanel(String labelText, StatusPerkawinan selected) {
         JPanel panel = createPanel(labelText);
 
-        StatusPerkawinan[] values = StatusPerkawinan.values();
-        Object[] arrChoices = new Object[values.length + 1];
-        arrChoices[0] = "";
-        System.arraycopy(values, 0, arrChoices, 1, values.length);
+        Object[] arrChoices = StatusPerkawinan.values();
 
         comboBoxStatusKawin = new JComboBox(arrChoices);
         panel.add(comboBoxStatusKawin);
 
+        comboBoxStatusKawin.setSelectedItem(selected);
         return panel;
     }
 
-    private JPanel createInputCheckBoxPekerjaanPanel(String labelText) {
+    private JPanel createInputCheckBoxPekerjaanPanel(String labelText, String selected) {
         JPanel panel = createPanel(labelText);
 
         JCheckBox checkKaryawanSwasta = new JCheckBox("Karyawan Swasta");
@@ -275,6 +313,28 @@ public class FormInput extends JFrame implements ActionListener {
 
         for (JCheckBox pekerjaan : listPekerjaan) {
             panel.add(pekerjaan);
+        }
+
+        if (selected.equals("Pengangguran ")) {
+            checkPengangguran.setSelected(true);
+        } else {
+            String[] pekerjaan = selected.split(" ");
+            for (String kerja : pekerjaan) {
+                switch (kerja) {
+                    case "KaryawanSwasta":
+                        checkKaryawanSwasta.setSelected(true);
+                        break;
+                    case "PNS":
+                        checkPNS.setSelected(true);
+                        break;
+                    case "Wiraswasta":
+                        checkWiraswasta.setSelected(true);
+                        break;
+                    case "Akademisi":
+                        checkAkademisi.setSelected(true);
+                        break;
+                }
+            }
         }
 
         checkPengangguran.addActionListener(e -> {
@@ -299,7 +359,7 @@ public class FormInput extends JFrame implements ActionListener {
         return panel;
     }
 
-    private JPanel createInputRadioKewarganegaraanPanel(String labelText) {
+    private JPanel createInputRadioKewarganegaraanPanel(String labelText, String selected) {
         JPanel panel = createPanel(labelText);
 
         JRadioButton radioButtonWNI = new JRadioButton("WNI");
@@ -314,6 +374,14 @@ public class FormInput extends JFrame implements ActionListener {
 
         additionalWnaField = new JTextField(20);
         additionalWnaField.setVisible(false);
+
+        if(selected.equals("WNI")){
+            radioButtonWNI.setSelected(true);
+        }else{
+            String[] split = selected.split(" ");
+            radioButtonWNA.setSelected(true);
+            additionalWnaField = new JTextField(split[1],20);
+        }
 
         panel.add(radioButtonWNI);
         panel.add(radioButtonWNA);
@@ -344,7 +412,7 @@ public class FormInput extends JFrame implements ActionListener {
         return panel;
     }
 
-    private void onSubmit() {
+    private void onUpdate() {
         LinkedList<Boolean> isValid = new LinkedList<>();
         isValid.add(validatingText());
         isValid.add(validatingDate());
@@ -371,8 +439,8 @@ public class FormInput extends JFrame implements ActionListener {
                 System.out.println(temp);
             }
 
-            SavingData dataToDB = new SavingData();
-            new HasilKTP(dataToDB.insertValueToDB(allInput), nikField.getText());
+            UpdateData dataToDB = new UpdateData();
+            new HasilKTP(dataToDB.updateValueToDB(allInput), nikField.getText());
 
             this.dispose();
         } else {
@@ -524,6 +592,6 @@ public class FormInput extends JFrame implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        onSubmit();
+        onUpdate();
     }
 }
