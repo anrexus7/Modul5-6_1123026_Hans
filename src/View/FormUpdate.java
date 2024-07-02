@@ -52,7 +52,7 @@ public class FormUpdate extends JFrame implements ActionListener {
     }
 
     private void initComponents() {
-        this.setTitle("Input Data Screen");
+        this.setTitle("Update Data Screen");
         this.setBounds(400, 200, 1000, 600);
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -375,7 +375,7 @@ public class FormUpdate extends JFrame implements ActionListener {
         additionalWnaField = new JTextField(20);
         additionalWnaField.setVisible(false);
 
-        if(selected.equals("WNI")){
+        if(selected.equalsIgnoreCase("WNI ")){
             radioButtonWNI.setSelected(true);
         }else{
             String[] split = selected.split(" ");
@@ -435,9 +435,6 @@ public class FormUpdate extends JFrame implements ActionListener {
         allInput.putAll(userInputFileChooser);
 
         if (isReallyValid) {
-            for(Object temp : allInput.values()){
-                System.out.println(temp);
-            }
 
             UpdateData dataToDB = new UpdateData();
             new HasilKTP(dataToDB.updateValueToDB(allInput), nikField.getText());

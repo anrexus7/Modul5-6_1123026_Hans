@@ -5,9 +5,12 @@ import Controller.GetData;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
-public class HasilKTP extends JFrame {
+public class HasilKTP extends JFrame{
     private static DataPenduduk showData;
+
     public HasilKTP(boolean isSuccess, String NIK) {
         if(!isSuccess){
             JOptionPane.showMessageDialog(null, "Task Failed !", "Error", JOptionPane.ERROR_MESSAGE);
@@ -23,7 +26,17 @@ public class HasilKTP extends JFrame {
         this.setTitle("Hasil Rekaman");
         this.setBounds(400, 200, 800, 600);
         this.setLocationRelativeTo(null);
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+
+        this.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                // Call your new Menu class here
+                new Menu();
+                // You can also dispose of the current frame if needed
+                dispose();
+            }
+        });
 
         JPanel container = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
@@ -117,17 +130,16 @@ public class HasilKTP extends JFrame {
 
         gbcR.gridx = 0;
         gbcR.gridy = 0;
-        rightContainer.add(createShowImage(showData.getFoto(), "pasFoto"), gbcR);
+        rightContainer.add(createShowImage("C:\\Kuliah\\semester pendek (2 ke 3)\\OOP\\Modul5dan6_1123026_Hans\\src\\img\\"+showData.getFoto(), "pasFoto"), gbcR);
 
         gbcR.gridy++;
-        System.out.println(showData.getFoto());
         rightContainer.add(createShowTextPanel(showData.getKotaPembuatanKTP(), ""), gbcR);
 
         gbcR.gridy++;
         rightContainer.add(createShowTextPanel(String.valueOf(showData.getTanggalPembuatanKTP()), ""), gbcR);
 
         gbcR.gridy++;
-        rightContainer.add(createShowImage(showData.getTandaTangan(),"tanda tangan"), gbcR);
+        rightContainer.add(createShowImage("C:\\Kuliah\\semester pendek (2 ke 3)\\OOP\\Modul5dan6_1123026_Hans\\src\\img\\"+showData.getTandaTangan(),"tanda tangan"), gbcR);
 
         return rightContainer;
     }

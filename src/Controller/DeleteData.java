@@ -13,9 +13,14 @@ public class DeleteData{
         String query = "DELETE FROM data_penduduk WHERE NIK='" + NIK + "'";
         try {
             Statement stmt = conn.con.createStatement();
-            stmt.executeUpdate(query);
+            int check = stmt.executeUpdate(query);
             conn.disconnect();
+
+            if(check==0){
+                return (false);
+            }
             return (true);
+
         } catch (SQLException e) {
             e.printStackTrace();
             conn.disconnect();

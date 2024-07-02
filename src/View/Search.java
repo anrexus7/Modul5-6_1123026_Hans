@@ -1,5 +1,7 @@
 package View;
 
+import Controller.DeleteData;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -13,7 +15,7 @@ public class Search extends JFrame implements ActionListener {
     }
 
     private void initComponents() {
-        this.setTitle("Menu Page");
+        this.setTitle("Search Page");
         this.setSize(500, 400);
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -28,7 +30,7 @@ public class Search extends JFrame implements ActionListener {
         gbc.gridwidth = 2;
         formContainer.add(createInputTextPanel("NIK : "), gbc);
 
-        button = new JButton("Show");
+        button = new JButton("Delete");
         button1 = new JButton("Update");
 
         button.setEnabled(true);
@@ -63,8 +65,15 @@ public class Search extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         String command = e.getActionCommand();
         switch (command) {
-            case "Show":
-                new HasilKTP(true, nikField.getText());
+            case "Delete":
+                DeleteData deletus = new DeleteData();
+                boolean valid = deletus.DeleteDataFromDB(nikField.getText());
+                if(valid){
+                    JOptionPane.showMessageDialog(null, "Data has been deleted");
+                }else {
+                    JOptionPane.showMessageDialog(null, "Task Failed !", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+                new Menu();
                 this.dispose();
                 break;
             case "Update":

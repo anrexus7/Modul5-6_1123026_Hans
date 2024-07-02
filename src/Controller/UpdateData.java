@@ -57,8 +57,13 @@ public class UpdateData {
             stmt.setDate(18, new java.sql.Date(tempData.getTanggalPembuatanKTP().getTime()));
             stmt.setString(19, tempData.getNIK());
 
-            stmt.executeUpdate();
+            int check = stmt.executeUpdate();
             conn.disconnect();
+
+            if(check==0){
+                return (false);
+            }
+
             return (true);
         } catch (SQLException e) {
             e.printStackTrace();

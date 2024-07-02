@@ -367,10 +367,6 @@ public class FormInput extends JFrame implements ActionListener {
         allInput.putAll(userInputFileChooser);
 
         if (isReallyValid) {
-            for(Object temp : allInput.values()){
-                System.out.println(temp);
-            }
-
             SavingData dataToDB = new SavingData();
             new HasilKTP(dataToDB.insertValueToDB(allInput), nikField.getText());
 

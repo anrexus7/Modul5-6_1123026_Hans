@@ -7,8 +7,13 @@ import Model.Enum.JenisKelamin;
 import Model.Enum.StatusPerkawinan;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.*;
 import java.util.Date;
 import java.util.Map;
+
+import static java.nio.file.StandardCopyOption.ATOMIC_MOVE;
+import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 
 public class Temporary {
     public static DataPenduduk temp(Map<String, Object> allInput){
@@ -69,17 +74,30 @@ public class Temporary {
 
         tempData.setPekerjaan((String) allInput.get("pekerjaan"));
 
-        tempData.setKewarganegaraan(allInput.get("kewarganegaraan").toString() +" "+allInput.get("additionalWNA"));
+        tempData.setKewarganegaraan(allInput.get("kewarganegaraan").toString()+" "+allInput.get("additionalWNA"));
 
         File foto = (File) allInput.get("fileFoto");
-        tempData.setFoto(foto.getAbsolutePath());
+        moveFile(foto);
+        tempData.setFoto(foto.getName());
+
         File tandaTangan = (File) allInput.get("fileTandaTangan");
-        tempData.setTandaTangan(tandaTangan.getAbsolutePath());
+        moveFile(tandaTangan);
+        tempData.setTandaTangan(tandaTangan.getName());
 
         tempData.setBerlakuHingga("Seumur Hidup");
         tempData.setKotaPembuatanKTP((String) allInput.get("kotaPembuatanKtp"));
         tempData.setTanggalPembuatanKTP((Date) allInput.get("tanggalPembuatanKTP"));
 
         return tempData;
+    }
+
+    private static void moveFile(File file){
+        Path sourcePath = file.toPath();
+        Path targetPath = Paths.get("C:\\Kuliah\\semester pendek (2 ke 3)\\OOP\\Modul5dan6_1123026_Hans\\src\\img", file.getName());
+        try {
+            Files.copy(sourcePath, targetPath, REPLACE_EXISTING);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
